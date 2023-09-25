@@ -1,0 +1,52 @@
+pipeline {
+  agent any
+  stages {
+    stage('Poll') {
+      steps {
+        checkout scm
+      }
+    }
+    
+       stage('Test'){
+         steps{
+           sh './BuildAutomation/demoTest.sh'
+         }
+       }
+
+    
+    stage('Build') {
+      steps {
+        sh './BuildAutomation/demoBuild.sh'
+      }
+    }
+    
+        stage('Cleanup') {
+          steps {
+            bat """
+              "${ZIP_EXE}" a "${CLOUDFOLDER}\\${BUILD_TARGET}\\${BUILD_NAME}${TIME}.zip" "${BUILD_PATH}"
+            """
+            bat """
+              rmdir /s /q "${BUILD_PATH}"
+            """
+          }
+        }
+    
+  }
+  environment {
+    CLOUDFOLDER = "C:\\CloudFolder\\Builds"
+    TIME = "${BUILD_TIMESTAMP}"
+    WORKSPACE = pwd()
+    BUILD_TARGET='StandaloneWindows64'
+    BUILD_NAME="MyProject"
+    BUILDS_DIR = 'C:\\Builds'
+    BUILD_PATH="${BUILDS_DIR}\\${BUILD_TARGET}\\${BUILD_NAME}${TIME}"
+    BUILD_METHOD="BuildScript.BashBuild"
+    BRANCH = "${GIT_BRANCH.replaceFirst(/^.*\//, '')}"
+    SUB_DIR = "${BRANCH}${TIME}"
+    ZIP_EXE = "C:\\Program Files\\7-Zip\\7z.exe"
+    UNITY_VER = "C:\\Program Files\\Unity\\Hub\\Editor\\2021.3.18f1\\Editor\\Unity.exe"
+  }
+  options {
+    disableConcurrentBuilds()
+  }
+}

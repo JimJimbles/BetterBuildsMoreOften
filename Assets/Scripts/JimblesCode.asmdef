@@ -1,0 +1,16 @@
+{
+    "name": "JimblesCode",
+    "rootNamespace": "",
+    "references": [
+        "GUID:67335d2a50693c149a53e742b28c24e0"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
